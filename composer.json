@@ -6,8 +6,8 @@
     "type": "library",
     "repositories": [
         {
-            "type": "composer",
-            "url": "http://php.reporangler.develop",
+            "type": "git",
+            "url": "https://github.com/reporangler/lib-reporangler"
         }
     ],
     "require": {
