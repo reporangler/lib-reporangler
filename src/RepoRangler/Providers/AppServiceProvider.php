@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Lumen\Application;
 use RepoRangler\Entity\PublicUser;
+use RepoRangler\Entity\AuthenticatedUser;
 use RepoRangler\Services\AuthClient;
 use RepoRangler\Services\MetadataClient;
 
@@ -26,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
             return new PublicUser($repositoryType);
         });
 
-        $this->app->bind(PublicUser::class, function(Application $app, array $params){
+        $this->app->bind(AuthenticatedUser::class, function(Application $app, array $params){
             return new AuthenticatedUser($params);
         });
 

@@ -4,6 +4,12 @@
     "keywords": ["reporangler", "php", "lumen"],
     "license": "MIT",
     "type": "library",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://php.reporangler.develop",
+        }
+    ],
     "require": {
         "php": ">=7.1.3",
         "guzzlehttp/guzzle": "^6.3"
