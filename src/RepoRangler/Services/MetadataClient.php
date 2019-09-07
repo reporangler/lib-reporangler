@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace RepoRangler\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
