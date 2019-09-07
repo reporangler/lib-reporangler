@@ -2,12 +2,12 @@
 
 namespace RepoRangler\Providers;
 
-use App\Services\MetadataClient;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Lumen\Application;
 use RepoRangler\Entity\PublicUser;
 use RepoRangler\Services\AuthClient;
+use RepoRangler\Services\MetadataClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
             $baseUrl = config('app.auth_base_url');
             $repositoryType = config('app.repository_type');
 
-            $httpClient = $app->make(Client::class);
+            $httpClient = app(Client::class);
 
             return new AuthClient($baseUrl, $httpClient, $repositoryType);
         });
@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(MetadataClient::class, function(Application $app){
             $baseUrl = config('app.metadata_base_url');
 
-            $httpClient = $app->make(Client::class);
+            $httpClient = app(Client::class);
 
             return new MetadataClient($baseUrl, $httpClient);
         });
