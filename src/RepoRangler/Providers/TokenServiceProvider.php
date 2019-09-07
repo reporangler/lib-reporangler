@@ -23,15 +23,21 @@ class TokenServiceProvider extends ServiceProvider
             /** @var AuthClient $authClient */
             $authClient = app(AuthClient::class);
 
+            $token = $request->headers->get('Authorization');
+
             try{
-                $token = $request->headers->get('Authorization');
                 $response = $authClient->check($token);
-                $json = json_decode((string)$response->getBody(), true);
-                return new AuthenticatedUser($json);
-            }catch(ClientException $exception){
-                $repositoryType = $request->headers->get('reporangler-repository-type');
-                return new PublicUser($repositoryType);
+                if($response->getStatusCode() === 200){
+                    $json = json_decode((string)$response->getBody(), true);
+                    return new AuthenticatedUser($json);
+                }
+            }catch(Exception $exception){
+                error_log('Exception: '.$exception->getMessage());
+                /* Catch errors, but don't do anthing about them */
             }
+
+            $repositoryType = $request->headers->get('reporangler-repository-type');
+            return new PublicUser($repositoryType);
         });
     }
 }

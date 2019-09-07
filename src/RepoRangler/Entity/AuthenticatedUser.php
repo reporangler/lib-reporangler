@@ -37,14 +37,10 @@ class AuthenticatedUser extends Model implements AuthenticatableContract, Author
         foreach($this->fillable as $key){
             if(array_key_exists($key, $attributes)){
                 $this->$key = $attributes[$key];
-            }else{
+            }else if($key !== 'token'){
+                // Token can be missing, say if the user is being checked and not logged in
                 throw new \InvalidArgumentException("Attributes array is missing key '$key'");
             }
         }
-    }
-
-    public function getPackageNamesAttribute()
-    {
-        return Arr::pluck($this->package_groups, 'name');
     }
 }

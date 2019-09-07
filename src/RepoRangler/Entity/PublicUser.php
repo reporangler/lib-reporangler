@@ -11,6 +11,8 @@ class PublicUser extends Model implements AuthenticatableContract, AuthorizableC
 {
     use Authenticatable, Authorizable;
 
+    const PUBLIC_TOKEN = 'public';
+
     public $id;
     public $username;
     public $token;
@@ -38,16 +40,14 @@ class PublicUser extends Model implements AuthenticatableContract, AuthorizableC
         parent::__construct([
             'id' => 0,
             'username' => 'public-user',
-            'token' => '',
+            'token' => self::PUBLIC_TOKEN,
             'repository_type' => $repositoryType,
             'package_groups' => [
-                'name' => 'public'
+                [
+                    'id' => 0,
+                    'name' => 'public'
+                ]
             ],
         ]);
-    }
-
-    public function getPackageNamesAttribute()
-    {
-        return Arr::pluck($this->package_groups, 'name');
     }
 }

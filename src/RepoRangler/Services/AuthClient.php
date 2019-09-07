@@ -4,6 +4,7 @@ namespace RepoRangler\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
+use RepoRangler\Entity\PublicUser;
 
 class AuthClient
 {
@@ -41,7 +42,11 @@ class AuthClient
         $token = str_replace('Bearer','',$token);
         $token = trim($token);
 
-        return $this->httpClient->post($this->baseUrl . '/user/check', [
+        if($token === PublicUser::PUBLIC_TOKEN){
+            throw new \InvalidArgumentException("Cannot check public tokens");
+        }
+
+        return $this->httpClient->get($this->baseUrl . '/user/check', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
