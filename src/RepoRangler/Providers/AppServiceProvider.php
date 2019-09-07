@@ -21,16 +21,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(Client::class);
 
-        $this->app->bind(PublicUser::class, function(Application $app){
-            $repositoryType = config('app.repository_type');
-
-            return new PublicUser($repositoryType);
-        });
-
-        $this->app->bind(AuthenticatedUser::class, function(Application $app, array $params){
-            return new AuthenticatedUser($params);
-        });
-
         $this->app->bind(AuthClient::class, function(Application $app){
             $baseUrl = config('app.auth_base_url');
 

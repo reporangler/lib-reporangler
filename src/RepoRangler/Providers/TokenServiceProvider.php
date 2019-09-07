@@ -24,13 +24,14 @@ class TokenServiceProvider extends ServiceProvider
             $authClient = app(AuthClient::class);
 
             try{
-                $response = $authClient->check($request->headers->get('Authorization'));
+                $token = $request->headers->get('Authorization');
+                $response = $authClient->check($token);
                 $json = json_decode((string)$response->getBody(), true);
+                return new AuthenticatedUser($json);
             }catch(ClientException $exception){
-                return app(PublicUser::class);
+                $repositoryType = $request->headers->get('reporangler-repository-type');
+                return new PublicUser($repositoryType);
             }
-
-            return app(AuthenticatedUser::class, $json);
         });
     }
 }
