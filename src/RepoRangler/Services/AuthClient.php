@@ -17,27 +17,35 @@ class AuthClient
      */
     private $httpClient;
 
-    /**
-     * @var string
-     */
-    private $repositoryType;
-
-    public function __construct(string $baseUrl, Client $httpClient, string $repositoryType)
+    public function __construct(string $baseUrl, Client $httpClient)
     {
         $this->baseUrl = $baseUrl;
         $this->httpClient = $httpClient;
-        $this->repositoryType = $repositoryType;
     }
 
-    public function login($type, $username, $password): ResponseInterface
+    public function login(string $type, string $username, string $password, string $repositoryType): ResponseInterface
     {
         return $this->httpClient->post($this->baseUrl.'/user/login', [
             RequestOptions::JSON => [
                 'type' => $type,
                 'username' => $username,
                 'password' => $password,
-                'repository_type' => $this->repositoryType,
+                'repository_type' => $repositoryType,
             ]
+        ]);
+    }
+
+    public function check(string $token): ResponseInterface
+    {
+        // Just in case the string is direct from the header of a subrequest, strip this out
+        $token = str_replace('Bearer','',$token);
+        $token = trim($token);
+
+        return $this->httpClient->post($this->baseUrl . '/user/check', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Accept' => 'application/json',
+            ],
         ]);
     }
 }

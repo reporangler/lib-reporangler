@@ -33,11 +33,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(AuthClient::class, function(Application $app){
             $baseUrl = config('app.auth_base_url');
-            $repositoryType = config('app.repository_type');
 
             $httpClient = app(Client::class);
 
-            return new AuthClient($baseUrl, $httpClient, $repositoryType);
+            return new AuthClient($baseUrl, $httpClient);
         });
 
         $this->app->bind(MetadataClient::class, function(Application $app){
