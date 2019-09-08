@@ -6,7 +6,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use RepoRangler\Entity\AuthenticatedUser;
+use RepoRangler\Entity\RepositoryUser;
 use RepoRangler\Entity\PublicUser;
 use RepoRangler\Services\AuthClient;
 
@@ -29,7 +29,7 @@ class TokenServiceProvider extends ServiceProvider
                 $response = $authClient->check($token);
                 if($response->getStatusCode() === 200){
                     $json = json_decode((string)$response->getBody(), true);
-                    return new AuthenticatedUser($json);
+                    return new RepositoryUser($json);
                 }
             }catch(Exception $exception){
                 error_log('Exception: '.$exception->getMessage());

@@ -2,16 +2,15 @@
 namespace RepoRangler\Entity;
 
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Support\Arr;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class PublicUser extends Model implements RepoRanglerUserInterface, AuthenticatableContract, AuthorizableContract
+class RestApiUser extends Model implements RepoRanglerUserInterface, AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
-
-    const PUBLIC_TOKEN = 'public';
 
     public $id;
     public $username;
@@ -31,23 +30,17 @@ class PublicUser extends Model implements RepoRanglerUserInterface, Authenticata
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-    ];
+    protected $hidden = ['password'];
 
-    public function __construct(string $repositoryType)
+    public function __construct(array $attributes)
     {
-        parent::__construct([
-            'id' => 0,
-            'username' => 'public-user',
-            'token' => self::PUBLIC_TOKEN,
-            'repository_type' => $repositoryType,
-            'package_groups' => [
-                [
-                    'id' => 0,
-                    'name' => 'public'
-                ]
-            ],
-        ]);
+        foreach($this->fillable as $key){
+            if(array_key_exists($key, $attributes)){
+                $this->$key = $attributes[$key];
+            }else if($key !== 'token'){
+                // Token can be missing, say if the user is being checked and not logged in
+                throw new \InvalidArgumentException("Attributes array is missing key '$key'");
+            }
+        }
     }
 }
