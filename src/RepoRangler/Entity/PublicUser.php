@@ -1,53 +1,96 @@
 <?php
 namespace RepoRangler\Entity;
 
-use Illuminate\Auth\Authenticatable;
-use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class PublicUser extends Model implements RepoRanglerUserInterface, AuthenticatableContract, AuthorizableContract
+class PublicUser extends Model implements UserInterface
 {
-    use Authenticatable, Authorizable;
-
-    const PUBLIC_TOKEN = 'public';
-
-    public $id;
-    public $username;
-    public $token;
-    public $repository_type;
-    public $package_groups = [];
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['id', 'username', 'token', 'repository_type', 'package_groups'];
+    protected $fillable = ['id', 'username', 'token', 'capability_map', 'package_groups'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-    ];
+    protected $hidden = ['password'];
 
-    public function __construct(string $repositoryType)
+    public function __construct(array $attributes = [])
     {
         parent::__construct([
             'id' => 0,
-            'username' => 'public-user',
-            'token' => self::PUBLIC_TOKEN,
-            'repository_type' => $repositoryType,
+            'username' => UserInterface::PUBLIC_USERNAME,
+            'token' => UserInterface::PUBLIC_TOKEN,
+            'capability_map' => [
+                new UserCapability(['name' => UserCapability::IS_PUBLIC_USER]),
+            ],
             'package_groups' => [
-                [
-                    'id' => 0,
-                    'name' => 'public'
-                ]
+                new PackageGroup(['name' => PackageGroup::PUBLIC_GROUP]),
             ],
         ]);
+    }
+
+    public function setUsername(string $username): UserInterface
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function setRepositoryType(string $repository_type): UserInterface
+    {
+        $this->repository_type = $repository_type;
+
+        return $this;
+    }
+
+    public function getRepositoryType(): string
+    {
+        return $this->repository_type;
+    }
+
+    public function hasCapability($name, $constraint = null): bool
+    {
+        return !!$this->getCapability($name, $constraint);
+    }
+
+    public function getCapability($name, $constraint = null): ?UserCapability
+    {
+        foreach($this->capability as $cap){
+            if($cap->name === $name){
+                return $cap;
+            }
+        }
+
+        return null;
+    }
+
+    public function getIsPublicUserAttribute(): bool
+    {
+        return $this->hasCapability(UserCapability::IS_PUBLIC_USER);
+    }
+
+    public function getIsAdminUserAttribute(): bool
+    {
+        return $this->hasCapability(UserCapability::IS_ADMIN_USER);
+    }
+
+    public function getIsRestUserAttribute(): bool
+    {
+        return $this->hasCapability(UserCapability::IS_REST_USER);
+    }
+
+    public function getIsRepoUserAttribute(): bool
+    {
+        return $this->hasCapability(UserCapability::IS_REPO_USER);
     }
 }
