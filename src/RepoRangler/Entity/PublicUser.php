@@ -12,6 +12,8 @@ class PublicUser extends Model implements UserInterface
      */
     protected $fillable = ['id', 'username', 'token', 'capability_map', 'package_groups'];
 
+    protected $appends = ['is_admin_user', 'is_rest_user', 'package_groups'];
+
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -46,18 +48,6 @@ class PublicUser extends Model implements UserInterface
         return $this->username;
     }
 
-    public function setRepositoryType(string $repository_type): UserInterface
-    {
-        $this->repository_type = $repository_type;
-
-        return $this;
-    }
-
-    public function getRepositoryType(): string
-    {
-        return $this->repository_type;
-    }
-
     public function hasCapability($name, $constraint = null): bool
     {
         return !!$this->getCapability($name, $constraint);
@@ -72,6 +62,17 @@ class PublicUser extends Model implements UserInterface
         }
 
         return null;
+    }
+
+    public function getPackageGroupsAttribute(): array
+    {
+        $packageGroups = [];
+
+        foreach($this->capability as $cap) {
+
+        }
+
+        return $packageGroups;
     }
 
     public function getIsPublicUserAttribute(): bool

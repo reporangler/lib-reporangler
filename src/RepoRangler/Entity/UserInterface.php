@@ -9,11 +9,10 @@ interface UserInterface
     public function setUsername(string $username): UserInterface;
     public function getUsername(): string;
 
-    public function setRepositoryType(string $repository_type): UserInterface;
-    public function getRepositoryType(): string;
-
     public function hasCapability($name, $constraint = null): bool;
     public function getCapability($name, $constraint = null): ?UserCapability;
+
+    public function getPackageGroupsAttribute(): array;
 
     public function getIsPublicUserAttribute(): bool;
     public function getIsAdminUserAttribute(): bool;
