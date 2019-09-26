@@ -3,8 +3,13 @@ namespace RepoRangler\Entity;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PublicUser extends Model implements UserInterface
+use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+
+class PublicUser extends Model implements UserInterface, AuthorizableContract
 {
+    use Authorizable;
+
     /**
      * The attributes that are mass assignable.
      *
