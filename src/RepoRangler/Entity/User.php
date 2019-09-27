@@ -56,21 +56,21 @@ class User extends Model implements UserInterface, AuthorizableContract
 
     public function getIsPublicUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_PUBLIC_USER);
+        return $this->hasCapability(Capability::IS_PUBLIC_USER);
     }
 
     public function getIsAdminUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_ADMIN_USER);
+        return $this->hasCapability(Capability::IS_ADMIN_USER);
     }
 
     public function getIsRestUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_REST_USER);
+        return $this->hasCapability(Capability::IS_REST_USER);
     }
 
     public function getIsRepoUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_REPO_USER);
+        return $this->hasCapability(Capability::IS_REPO_USER);
     }
 }

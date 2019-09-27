@@ -34,7 +34,7 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
             'email' => null,
             'token' => UserInterface::PUBLIC_TOKEN,
             'capability' => new Collection([
-                new UserCapability(['name' => UserCapability::IS_PUBLIC_USER]),
+                new UserCapability(['name' => Capability::IS_PUBLIC_USER]),
             ]),
             'package_groups' => new Collection([
                 new PackageGroup(['name' => PackageGroup::PUBLIC_GROUP]),
@@ -75,21 +75,21 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
 
     public function getIsPublicUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_PUBLIC_USER);
+        return $this->hasCapability(Capability::IS_PUBLIC_USER);
     }
 
     public function getIsAdminUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_ADMIN_USER);
+        return $this->hasCapability(Capability::IS_ADMIN_USER);
     }
 
     public function getIsRestUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_REST_USER);
+        return $this->hasCapability(Capability::IS_REST_USER);
     }
 
     public function getIsRepoUserAttribute(): bool
     {
-        return $this->hasCapability(UserCapability::IS_REPO_USER);
+        return $this->hasCapability(Capability::IS_REPO_USER);
     }
 }
