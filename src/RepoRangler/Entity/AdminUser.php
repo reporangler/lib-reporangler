@@ -1,7 +1,7 @@
 <?php
 namespace RepoRangler\Entity;
 
-class AdminUser extends PublicUser
+class AdminUser extends User
 {
 
 }

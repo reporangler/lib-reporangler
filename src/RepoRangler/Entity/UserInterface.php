@@ -6,9 +6,6 @@ interface UserInterface
     const PUBLIC_USERNAME = 'public-user';
     const PUBLIC_TOKEN = 'public';
 
-    public function setUsername(string $username): UserInterface;
-    public function getUsername(): string;
-
     public function hasCapability($name, $constraint = null): bool;
     public function getCapability($name, $constraint = null): ?UserCapability;
 

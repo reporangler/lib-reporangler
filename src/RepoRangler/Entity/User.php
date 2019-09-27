@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class PublicUser extends User implements UserInterface, AuthorizableContract
+class User extends Model implements UserInterface, AuthorizableContract
 {
     use Authorizable;
 
@@ -26,25 +26,6 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
      * @var array
      */
     protected $hidden = ['password'];
-
-    static public function __construct(array $attributes = [])
-    {
-        $defaultAttributes = [
-            'username' => UserInterface::PUBLIC_USERNAME,
-            'email' => null,
-            'token' => UserInterface::PUBLIC_TOKEN,
-            'capability' => new Collection([
-                new UserCapability(['name' => UserCapability::IS_PUBLIC_USER]),
-            ]),
-            'package_groups' => new Collection([
-                new PackageGroup(['name' => PackageGroup::PUBLIC_GROUP]),
-            ]),
-        ];
-
-        $attributes = array_merge($defaultAttributes, $attributes);
-
-        return parent::__construct($attributes);
-    }
 
     public function hasCapability($name, $constraint = null): bool
     {
