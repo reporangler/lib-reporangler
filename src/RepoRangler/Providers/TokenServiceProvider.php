@@ -6,8 +6,8 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use RepoRangler\Entity\RepositoryUser;
-use RepoRangler\Entity\PublicUser;
+use Laravel\Lumen\Http\Request;
+use RepoRangler\Entity\User;
 use RepoRangler\Services\AuthClient;
 
 class TokenServiceProvider extends ServiceProvider
@@ -22,9 +22,9 @@ class TokenServiceProvider extends ServiceProvider
         Auth::viaRequest('token', function (Request $request) {
             $authClient = app(AuthClient::class);
 
-            $response = $authClient->checkToken($request->header('authorization'));
+            $response = $authClient->check($request->header('authorization'));
 
-            return new RestUser($response);
+            return new User($response);
         });
     }
 }
