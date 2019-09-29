@@ -24,9 +24,9 @@ class AuthClient
         $this->httpClient = $httpClient;
     }
 
-    public function login(string $type, string $username, string $password, string $repositoryType): ResponseInterface
+    public function login(string $type, string $username, string $password): ResponseInterface
     {
-        return $this->httpClient->post($this->baseUrl.'/login/api', [
+        return $this->httpClient->get($this->baseUrl.'/login/api', [
             'headers' => [
                 'reporangler-login-type' => $type,
                 'reporangler-login-username' => $username,
