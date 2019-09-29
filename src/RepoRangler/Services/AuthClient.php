@@ -24,7 +24,7 @@ class AuthClient
         $this->httpClient = $httpClient;
     }
 
-    public function login(string $type, string $username, string $password): ResponseInterface
+    public function login(string $type, string $username, string $password): array
     {
         $response = $this->httpClient->get($this->baseUrl.'/login/api', [
             'headers' => [
@@ -37,7 +37,7 @@ class AuthClient
         return json_decode((string)$response->getBody(), true);
     }
 
-    public function check(string $token): ResponseInterface
+    public function check(string $token): array
     {
         // Just in case the string is direct from the header of a subrequest, strip this out
         $token = str_replace('Bearer','',$token);
