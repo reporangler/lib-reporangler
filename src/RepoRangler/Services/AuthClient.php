@@ -26,13 +26,12 @@ class AuthClient
 
     public function login(string $type, string $username, string $password, string $repositoryType): ResponseInterface
     {
-        return $this->httpClient->post($this->baseUrl.'/user/login', [
-            RequestOptions::JSON => [
-                'type' => $type,
-                'username' => $username,
-                'password' => $password,
-                'repository_type' => $repositoryType,
-            ]
+        return $this->httpClient->post($this->baseUrl.'/login/api', [
+            'headers' => [
+                'reporangler-login-type' => $type,
+                'reporangler-login-username' => $username,
+                'reporangler-login-password' => $password,
+            ],
         ]);
     }
 
@@ -46,7 +45,7 @@ class AuthClient
             throw new \InvalidArgumentException("Cannot check public tokens");
         }
 
-        return $this->httpClient->get($this->baseUrl . '/user/check', [
+        return $this->httpClient->get($this->baseUrl . '/login/token', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
