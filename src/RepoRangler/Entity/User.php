@@ -25,7 +25,7 @@ class User extends Model implements UserInterface, AuthorizableContract
      *
      * @var array
      */
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'capability'];
 
     public function hasCapability($name, $constraint = null): bool
     {
@@ -48,7 +48,9 @@ class User extends Model implements UserInterface, AuthorizableContract
         $packageGroups = [];
 
         foreach($this->capability as $cap) {
-
+            if(in_array($cap->name, [Capability::PACKAGE_GROUP_ACCESS, Capability::PACKAGE_GROUP_ADMIN])){
+                $packageGroups[$cap->constraint['name']] = $cap->name;
+            }
         }
 
         return $packageGroups;
