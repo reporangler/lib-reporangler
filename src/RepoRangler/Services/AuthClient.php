@@ -26,13 +26,15 @@ class AuthClient
 
     public function login(string $type, string $username, string $password): ResponseInterface
     {
-        return $this->httpClient->get($this->baseUrl.'/login/api', [
+        $response = $this->httpClient->get($this->baseUrl.'/login/api', [
             'headers' => [
                 'reporangler-login-type' => $type,
                 'reporangler-login-username' => $username,
                 'reporangler-login-password' => $password,
             ],
         ]);
+
+        return json_decode((string)$response->getBody(), true);
     }
 
     public function check(string $token): ResponseInterface
@@ -45,11 +47,13 @@ class AuthClient
             throw new \InvalidArgumentException("Cannot check public tokens");
         }
 
-        return $this->httpClient->get($this->baseUrl . '/login/token', [
+        $response = $this->httpClient->get($this->baseUrl . '/login/token', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
             ],
         ]);
+
+        return json_decode((string)$response->getBody(), true);
     }
 }

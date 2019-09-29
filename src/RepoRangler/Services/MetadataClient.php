@@ -51,5 +51,7 @@ class MetadataClient
                 'repository_type' => $repositoryType,
             ]
         ]);
+
+        return json_decode((string)$response->getBody(), true);
     }
 }

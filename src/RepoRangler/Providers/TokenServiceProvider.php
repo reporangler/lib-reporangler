@@ -24,9 +24,7 @@ class TokenServiceProvider extends ServiceProvider
 
             $response = $authClient->checkToken($request->header('authorization'));
 
-            $data = json_decode((string)$response->getBody(), true);
-
-            return new RestUser($data);
+            return new RestUser($response);
         });
     }
 }
