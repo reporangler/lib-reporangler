@@ -27,7 +27,7 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
      */
     protected $hidden = ['password'];
 
-    static public function __construct(array $attributes = [])
+    public function __construct(array $attributes = [])
     {
         $defaultAttributes = [
             'username' => UserInterface::PUBLIC_USERNAME,
