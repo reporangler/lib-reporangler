@@ -16,7 +16,12 @@ class User extends Model implements UserInterface, AuthorizableContract
      *
      * @var array
      */
-    protected $fillable = ['username', 'email', 'password'];
+    protected $fillable = [
+        'username',
+        'email',
+        'password',
+        'capability',
+    ];
 
     protected $appends = ['is_admin_user', 'is_rest_user', 'package_groups'];
 
@@ -34,7 +39,7 @@ class User extends Model implements UserInterface, AuthorizableContract
 
     public function getCapability($name, $constraint = null): ?UserCapability
     {
-        foreach($this->getAttribute('capability') as $cap){
+        foreach($this->capability as $cap){
             if($cap->name === $name){
                 return $cap;
             }
@@ -43,11 +48,20 @@ class User extends Model implements UserInterface, AuthorizableContract
         return null;
     }
 
+    public function setCapabilityAttribute(array $list)
+    {
+        $this->capability = array_map(function ($item){
+            if($item instanceof UserCapability) return $item;
+
+            return new UserCapability((array)$item);
+        }, $list);
+    }
+
     public function getPackageGroupsAttribute(): array
     {
         $packageGroups = [];
 
-        foreach($this->capability as $cap) {
+        foreach($this->capability as $cap){
             if(in_array($cap->name, [Capability::PACKAGE_GROUP_ACCESS, Capability::PACKAGE_GROUP_ADMIN])){
                 $packageGroups[$cap->constraint['name']] = $cap->name;
             }
