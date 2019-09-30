@@ -34,7 +34,7 @@ class User extends Model implements UserInterface, AuthorizableContract
 
     public function getCapability($name, $constraint = null): ?UserCapability
     {
-        foreach($this->capability as $cap){
+        foreach($this->getAttribute('capability') as $cap){
             if($cap->name === $name){
                 return $cap;
             }
