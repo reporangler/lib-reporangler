@@ -9,24 +9,6 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class PublicUser extends User implements UserInterface, AuthorizableContract
 {
-    use Authorizable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['username', 'email', 'password'];
-
-    protected $appends = ['is_admin_user', 'is_rest_user', 'package_groups'];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['password'];
-
     public function __construct(array $attributes = [])
     {
         $defaultAttributes = [

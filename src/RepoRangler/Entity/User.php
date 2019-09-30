@@ -25,7 +25,7 @@ class User extends Model implements UserInterface, AuthorizableContract
      *
      * @var array
      */
-    protected $hidden = ['password', 'capability'];
+    protected $hidden = ['password'];
 
     public function hasCapability($name, $constraint = null): bool
     {
