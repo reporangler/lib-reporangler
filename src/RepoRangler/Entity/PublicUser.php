@@ -16,62 +16,22 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
             'email' => null,
             'token' => UserInterface::PUBLIC_TOKEN,
             'capability' => new Collection([
-                new UserCapability(['name' => Capability::IS_PUBLIC_USER]),
-            ]),
-            'package_groups' => new Collection([
-                new PackageGroup(['name' => PackageGroup::PUBLIC_GROUP]),
+                new UserCapability([
+                    'name' => Capability::IS_PUBLIC_USER,
+                ]),
+                new UserCapability([
+                    'name' => Capability::REPOSITORY_ACCESS,
+                    'constraint' => ['name' => 'php']
+                ]),
+                new UserCapability([
+                    'name' => Capability::PACKAGE_GROUP_ACCESS,
+                    'constraint' => ['name' => 'public']
+                ]),
             ]),
         ];
 
         $attributes = array_merge($defaultAttributes, $attributes);
 
         return parent::__construct($attributes);
-    }
-
-    public function hasCapability($name, $constraint = null): bool
-    {
-        return !!$this->getCapability($name, $constraint);
-    }
-
-    public function getCapability($name, $constraint = null): ?UserCapability
-    {
-        foreach($this->capability as $cap){
-            if($cap->name === $name){
-                return $cap;
-            }
-        }
-
-        return null;
-    }
-
-    public function getPackageGroupsAttribute(): array
-    {
-        $packageGroups = [];
-
-        foreach($this->capability as $cap) {
-
-        }
-
-        return $packageGroups;
-    }
-
-    public function getIsPublicUserAttribute(): bool
-    {
-        return $this->hasCapability(Capability::IS_PUBLIC_USER);
-    }
-
-    public function getIsAdminUserAttribute(): bool
-    {
-        return $this->hasCapability(Capability::IS_ADMIN_USER);
-    }
-
-    public function getIsRestUserAttribute(): bool
-    {
-        return $this->hasCapability(Capability::IS_REST_USER);
-    }
-
-    public function getIsRepoUserAttribute(): bool
-    {
-        return $this->hasCapability(Capability::IS_REPO_USER);
     }
 }

@@ -19,6 +19,7 @@ class User extends Model implements UserInterface, AuthorizableContract
     protected $fillable = [
         'username',
         'email',
+        'token',
         'password',
         'capability',
     ];
