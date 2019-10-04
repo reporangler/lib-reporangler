@@ -25,11 +25,10 @@ class MetadataClient
 
     public function getPackages(string $token, string $repositoryType): array
     {
-        $response = $this->httpClient->get($this->baseUrl.'/packages', [
+        $response = $this->httpClient->get("$this->baseUrl/packages/$repositoryType", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
-                'reporangler-repository-type' => $repositoryType,
             ],
         ]);
 
@@ -38,7 +37,7 @@ class MetadataClient
 
     public function addPackage(string $token, string $repositoryType, string $packageGroup, string $packageName, string $packageVersion, array $definition): array
     {
-        $response = $this->httpClient->post($this->baseUrl.'/packages', [
+        $response = $this->httpClient->post("$this->baseUrl/packages/$repositoryType", [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
@@ -48,7 +47,6 @@ class MetadataClient
                 'version' => $packageVersion,
                 'definition' => $definition,
                 'package_group' => $packageGroup,
-                'repository_type' => $repositoryType,
             ]
         ]);
 
