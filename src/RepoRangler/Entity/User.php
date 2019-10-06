@@ -11,6 +11,8 @@ class User extends Model implements UserInterface, AuthorizableContract
 {
     use Authorizable;
 
+    const PATTERN = '[a-z][a-z0-9\-\.]+';
+
     /**
      * The attributes that are mass assignable.
      *
