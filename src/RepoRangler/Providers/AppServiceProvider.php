@@ -5,8 +5,6 @@ namespace RepoRangler\Providers;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Lumen\Application;
-use RepoRangler\Entity\PublicUser;
-use RepoRangler\Entity\RepositoryUser;
 use RepoRangler\Services\AuthClient;
 use RepoRangler\Services\MetadataClient;
 
