@@ -66,7 +66,7 @@ class User extends Model implements UserInterface, AuthorizableContract
 
         foreach($this->capability as $cap){
             if(in_array($cap->name, [Capability::PACKAGE_GROUP_ACCESS, Capability::PACKAGE_GROUP_ADMIN])){
-                $packageGroups[$cap->constraint['name']] = $cap->name;
+                $packageGroups[$cap->constraint['package_group']] = $cap->name;
             }
         }
 
