@@ -5,6 +5,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use RepoRangler\Entity\PackageGroup;
+use RepoRangler\Entity\Repository;
 
 class MetadataClient
 {
@@ -65,4 +66,40 @@ class MetadataClient
 
 		return new PackageGroup(json_decode((string)$response->getBody(), true));
 	}
+
+    public function getPackageGroupByName(string $token, string $name): PackageGroup
+    {
+        $response = $this->httpClient->get("$this->baseUrl/package-group/$name", [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Accept' => 'application/json',
+            ],
+        ]);
+
+        return new PackageGroup(json_decode((string)$response->getBody(), true));
+    }
+
+	public function getRepositoryById(string $token, int $id): Repository
+    {
+        $response = $this->httpClient->get("$this->baseUrl/repository/$id", [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Accept' => 'application/json',
+            ],
+        ]);
+
+        return new Repository(json_decode((string)$response->getBody(), true));
+    }
+
+    public function getRepositoryByName(string $token, string $name): Repository
+    {
+        $response = $this->httpClient->get("$this->baseUrl/repository/$name", [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Accept' => 'application/json',
+            ],
+        ]);
+
+        return new Repository(json_decode((string)$response->getBody(), true));
+    }
 }
