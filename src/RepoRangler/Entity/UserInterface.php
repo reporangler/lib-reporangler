@@ -7,7 +7,7 @@ interface UserInterface
     const PUBLIC_TOKEN = 'public';
 
     public function hasCapability($name, $constraint = null): bool;
-    public function getCapability($name, $constraint = null): ?UserCapability;
+    public function getCapability($name, $constraint = null): ?CapabilityMap;
 
     public function getPackageGroupsAttribute(): array;
 

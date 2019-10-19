@@ -40,7 +40,7 @@ class User extends Model implements UserInterface, AuthorizableContract
         return !!$this->getCapability($name, $constraint);
     }
 
-    public function getCapability($name, $constraint = null): ?UserCapability
+    public function getCapability($name, $constraint = null): ?CapabilityMap
     {
         foreach($this->capability as $cap){
             if($cap->name === $name){
@@ -54,9 +54,9 @@ class User extends Model implements UserInterface, AuthorizableContract
     public function setCapabilityAttribute(array $list)
     {
         $this->capability = array_map(function ($item){
-            if($item instanceof UserCapability) return $item;
+            if($item instanceof CapabilityMap) return $item;
 
-            return new UserCapability((array)$item);
+            return new CapabilityMap((array)$item);
         }, $list);
     }
 

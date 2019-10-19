@@ -16,14 +16,14 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
             'email' => null,
             'token' => UserInterface::PUBLIC_TOKEN,
             'capability' => new Collection([
-                new UserCapability([
+                new CapabilityMap([
                     'name' => Capability::IS_PUBLIC_USER,
                 ]),
-                new UserCapability([
+                new CapabilityMap([
                     'name' => Capability::REPOSITORY_ACCESS,
                     'constraint' => ['name' => 'php']
                 ]),
-                new UserCapability([
+                new CapabilityMap([
                     'name' => Capability::PACKAGE_GROUP_ACCESS,
                     'constraint' => ['name' => 'public']
                 ]),
