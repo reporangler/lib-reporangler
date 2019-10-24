@@ -3,6 +3,7 @@
 namespace RepoRangler\Providers;
 
 use GuzzleHttp\Client;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Lumen\Application;
 use RepoRangler\Services\AuthClient;
@@ -32,7 +33,13 @@ class AppServiceProvider extends ServiceProvider
 
             $httpClient = app(Client::class);
 
-            return new MetadataClient($baseUrl, $httpClient);
+            $token = app('user-token');
+
+            return new MetadataClient($baseUrl, $httpClient, $token);
+        });
+
+        $this->app->bindIf('user-token', function() {
+            throw new AuthorizationException("You must override the 'user-token' service in your lumen app to provider the token from the user object");
         });
     }
 }
