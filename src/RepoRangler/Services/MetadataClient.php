@@ -94,7 +94,7 @@ class MetadataClient
 	public function createPackageGroup(string $name): PackageGroup
     {
         $response = $this->httpClient->post("$this->baseUrl/package-group", $this->getRequestData([
-            'name' => $name;
+            'name' => $name,
         ]));
 
         return new PackageGroup($this->decode($response));
@@ -124,7 +124,7 @@ class MetadataClient
     public function createRepository(string $name): Repository
     {
         $response = $this->httpClient->post("$this->baseUrl/repository", $this->getRequestData([
-            'name' => $name;
+            'name' => $name,
         ]));
 
         return new Repository($this->decode($response));
