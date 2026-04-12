@@ -65,7 +65,7 @@ class MetadataClient
         throw new UnprocessableEntityHttpException('This endpoint did not return a list as expected');
     }
 
-	public function __construct(string $baseUrl, Client $httpClient, string $token)
+	public function __construct(string $baseUrl, Client $httpClient, ?string $token = null)
 	{
 		$this->baseUrl = $baseUrl;
 		$this->httpClient = $httpClient;
@@ -149,5 +149,40 @@ class MetadataClient
         $response = $this->httpClient->get("$this->baseUrl/repository/$name", $this->getRequestData());
 
         return new Repository($this->decode($response));
+    }
+
+    public function updatePackageGroup(int $id, string $name): PackageGroup
+    {
+        $response = $this->httpClient->put("$this->baseUrl/package-group", $this->getRequestData([
+            'id' => $id,
+            'name' => $name,
+        ]));
+        return new PackageGroup($this->decode($response));
+    }
+
+    public function deletePackageGroup(int $id): array
+    {
+        $response = $this->httpClient->delete("$this->baseUrl/package-group/$id", $this->getRequestData());
+        return $this->decode($response);
+    }
+
+    public function updateRepository(int $id, string $name): Repository
+    {
+        $response = $this->httpClient->put("$this->baseUrl/repository/$id", $this->getRequestData([
+            'name' => $name,
+        ]));
+        return new Repository($this->decode($response));
+    }
+
+    public function deleteRepository(int $id): array
+    {
+        $response = $this->httpClient->delete("$this->baseUrl/repository/$id", $this->getRequestData());
+        return $this->decode($response);
+    }
+
+    public function deletePackage(string $repositoryType, int $packageId): array
+    {
+        $response = $this->httpClient->delete("$this->baseUrl/package/$repositoryType/$packageId", $this->getRequestData());
+        return $this->decode($response);
     }
 }

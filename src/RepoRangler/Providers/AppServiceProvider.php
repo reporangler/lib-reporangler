@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Lumen\Application;
+use Illuminate\Foundation\Application;
 use RepoRangler\Services\AuthClient;
 use RepoRangler\Services\MetadataClient;
 
@@ -49,7 +49,11 @@ class AppServiceProvider extends ServiceProvider
 
             $httpClient = app(Client::class);
 
-            $token = app('user-token');
+            try {
+                $token = app('user-token');
+            } catch (\Exception $e) {
+                $token = null;
+            }
 
             return new MetadataClient($baseUrl, $httpClient, $token);
         });
