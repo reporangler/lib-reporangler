@@ -4,12 +4,14 @@ namespace RepoRangler\Entity;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Collection;
-use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Auth\Authenticatable;
 
-class User extends Model implements UserInterface, AuthorizableContract
+class User extends Model implements UserInterface, AuthorizableContract, AuthenticatableContract
 {
-    use Authorizable;
+    use Authorizable, Authenticatable;
 
     const PATTERN = '[a-z][a-z0-9\-\.]+';
 

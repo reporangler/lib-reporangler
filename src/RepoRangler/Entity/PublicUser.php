@@ -4,7 +4,7 @@ namespace RepoRangler\Entity;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Collection;
-use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class PublicUser extends User implements UserInterface, AuthorizableContract
@@ -15,7 +15,7 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
             'username' => UserInterface::PUBLIC_USERNAME,
             'email' => null,
             'token' => UserInterface::PUBLIC_TOKEN,
-            'capability' => new Collection([
+            'capability' => [
                 new CapabilityMap([
                     'name' => Capability::IS_PUBLIC_USER,
                 ]),
@@ -27,7 +27,7 @@ class PublicUser extends User implements UserInterface, AuthorizableContract
                     'name' => Capability::PACKAGE_GROUP_ACCESS,
                     'constraint' => ['name' => 'public']
                 ]),
-            ]),
+            ],
         ];
 
         $attributes = array_merge($defaultAttributes, $attributes);

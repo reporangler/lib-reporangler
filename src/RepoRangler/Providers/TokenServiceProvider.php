@@ -12,7 +12,7 @@ class TokenServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        Auth::viaRequest('token', function (Request $request) {
+        Auth::viaRequest('custom-token', function (Request $request) {
             $token = $request->header('authorization');
 
             if (empty($token)) {
