@@ -74,19 +74,35 @@ class MetadataClient
 
 	public function getPackages(string $repositoryType): array
 	{
-		$response = $this->httpClient->get("$this->baseUrl/packages/$repositoryType", $this->getRequestData());
+		$response = $this->httpClient->get("$this->baseUrl/package/$repositoryType", $this->getRequestData());
 
 		return json_decode((string)$response->getBody(), true);
 	}
 
-	public function addPackage(string $repositoryType, string $packageGroup, string $packageName, string $packageVersion, array $definition): array
+	public function addPackage(string $repositoryType, string $packageGroup, string $packageName, string $packageVersion, array $definition, ?string $storageKey = null, ?string $packageType = null): array
 	{
-		$response = $this->httpClient->post("$this->baseUrl/packages/$repositoryType", $this->getRequestData([
+	    $data = [
             'name' => $packageName,
             'version' => $packageVersion,
             'definition' => $definition,
             'package_group' => $packageGroup,
-        ]));
+        ];
+
+        if ($storageKey !== null) {
+            $data['storage_key'] = $storageKey;
+        }
+        if ($packageType !== null) {
+            $data['package_type'] = $packageType;
+        }
+
+		$response = $this->httpClient->post("$this->baseUrl/package/$repositoryType", $this->getRequestData($data));
+
+		return json_decode((string)$response->getBody(), true);
+	}
+
+	public function getPackagesByName(string $repositoryType, string $packageName): array
+	{
+		$response = $this->httpClient->get("$this->baseUrl/package/$repositoryType/by-name/" . urlencode($packageName), $this->getRequestData());
 
 		return json_decode((string)$response->getBody(), true);
 	}

@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Application;
 use RepoRangler\Services\AuthClient;
 use RepoRangler\Services\MetadataClient;
+use RepoRangler\Services\StorageClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,24 +30,16 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->app->bind(AuthClient::class, function(Application $app){
             $baseUrl = config('app.auth_base_url');
-
             $httpClient = app(Client::class);
-
             return new AuthClient($baseUrl, $httpClient);
         });
 
         $this->app->bind(MetadataClient::class, function(Application $app){
             $baseUrl = config('app.metadata_base_url');
-
             $httpClient = app(Client::class);
 
             try {
@@ -58,8 +51,24 @@ class AppServiceProvider extends ServiceProvider
             return new MetadataClient($baseUrl, $httpClient, $token);
         });
 
+        $this->app->bind(StorageClient::class, function(Application $app){
+            // Internal URL for server-to-server communication
+            $internalUrl = config('app.storage_base_url');
+            // Public URL for client-facing download links
+            $publicUrl = config('app.storage_public_url', $internalUrl);
+            $httpClient = app(Client::class);
+
+            try {
+                $token = app('user-token');
+            } catch (\Exception $e) {
+                $token = null;
+            }
+
+            return new StorageClient($internalUrl, $publicUrl, $httpClient, $token);
+        });
+
         $this->app->bindIf('user-token', function() {
-            throw new AuthorizationException("You must override the 'user-token' service in your lumen app to provider the token from the user object");
+            throw new AuthorizationException("You must override the 'user-token' service to provide the token from the user object");
         });
     }
 }
