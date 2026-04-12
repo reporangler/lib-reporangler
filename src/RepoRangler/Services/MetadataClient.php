@@ -54,7 +54,7 @@ class MetadataClient
     {
         $response = $this->decode($response);
 
-        if(!array_key_exists('data', $response)){
+        if(array_key_exists('data', $response)){
             $response['data'] = collect($response['data'])->map(function($value) use ($type) {
                 return new $type($value);
             });
@@ -100,7 +100,7 @@ class MetadataClient
         return new PackageGroup($this->decode($response));
     }
 
-    public function getPackageGroupList(): Collection
+    public function getPackageGroupList(): array
     {
         $response = $this->httpClient->get("$this->baseUrl/package-group", $this->getRequestData());
 
@@ -130,11 +130,11 @@ class MetadataClient
         return new Repository($this->decode($response));
     }
 
-    public function getRepositoryList(): Collection
+    public function getRepositoryList(): array
     {
         $response = $this->httpClient->get("$this->baseUrl/repository", $this->getRequestData());
 
-        return $this->decodeList($response, Response::class);
+        return $this->decodeList($response, Repository::class);
     }
 
 	public function getRepositoryById(int $id): Repository
